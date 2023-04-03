@@ -1,0 +1,22 @@
+- Django extensions
+	$ python pip -m pip install django-extensions Werkzeug
+
+- Python OpenSSL
+	$ python pip -m pip install pyopenssl
+
+- argon2-cffi library
+	$ python -m pip install argon2-cffi
+
+- pyotp
+	$ python -m pip install pyotp
+
+- Django REST Framework
+	$ python -m pip install djangorestframework
+
+
+- PyJWT
+	$ python -m pip install PyJWT
+
+
+- Django-cors-headers
+	$ python -m pip install django-cors-headers
