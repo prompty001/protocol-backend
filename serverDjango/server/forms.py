@@ -5,4 +5,4 @@ class RegistrationForm(forms.ModelForm):
     
     class Meta:
         model = User
-        fields = ('email', 'password', 'cpf', 'birthday', 'guid', 'androidId')
+        fields = ('name', 'email', 'password', 'cpf', 'birthday', 'androidId')

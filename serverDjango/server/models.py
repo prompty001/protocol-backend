@@ -20,11 +20,11 @@ class User(models.Model):
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
+    name = models.CharField(max_length=150, null=True)
     email = models.CharField(max_length=40, unique=True)  
-    password = models.CharField(max_length=200)
+    password = models.CharField(max_length=40)
     cpf = models.CharField(max_length=11, unique=True)
     birthday = models.DateField()
-    guid = models.CharField(max_length=36)
     androidId = models.CharField(max_length=16)
 
     username = None

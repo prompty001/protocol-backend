@@ -15,14 +15,15 @@ from django.contrib.auth import authenticate, login, logout
 
 from importlib import import_module
 from django.conf import settings
-SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
-from django.contrib.sessions.models import Session
+#SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
+#from django.contrib.sessions.models import Session
 
 
 class Home(APIView):
     def __str__(self) -> str:
-        return HttpResponse(totpGenerator())
+        #return HttpResponse(totpGenerator())
+        return HttpResponse(":)))")
     
 
 class RegisterView(APIView):
@@ -78,7 +79,7 @@ class LoginView(APIView):
         email = request.data['email']
         password = request.data['password']
         androidIdLogin = request.data['androidIdLogin']
-
+    
         user = User.objects.filter(email=email).first()
 
         if user is None:
@@ -95,21 +96,17 @@ class LoginView(APIView):
 
         payload = {
             'id': user.id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5), 
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30), 
             'iat': datetime.datetime.utcnow()
         }
 
         token = jwt.encode(payload, getPrivKey(), algorithm='HS256')
 
-        #guidAndroid = user.androidId
-
         response = Response()
 
-        response.set_cookie(key='jwt', value=token, httponly=True)
-        #response.set_cookie(key='guid', value=guidAndroid, httponly=True, max_age=300)
+        response.set_cookie(key='jwt', value=token, httponly=True) #secure=True
         response.data = {
             'jwt': token,
-            #'guid': guidAndroid 
         }
 
         return response
@@ -118,9 +115,8 @@ class LoginView(APIView):
 class UserView(APIView):
     def get(self, request):
         userToken = request.COOKIES.get('jwt')
-        userGuid = request.COOKIES.get('guid')
 
-        if not userToken and not userGuid:
+        if not userToken:
             raise AuthenticationFailed('Usuário não autenticado.')
 
         try:
@@ -138,12 +134,10 @@ class UserView(APIView):
 class LogoutView(APIView):
     def post(self, request):
         userToken = request.COOKIES.get('jwt', None)
-        userGuid = request.COOKIES.get('guid', None)
 
-        if userToken and userGuid:
+        if userToken:
             response = Response()
             response.delete_cookie('jwt')
-            response.delete_cookie('guid')
             response.data = {
                 'message': 'Logout bem sucedido.'
             }
